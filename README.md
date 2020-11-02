@@ -1,2 +1,2 @@
 # SSD
-SSD: A Unified Framework for Self-Supervised Outlier Detection
+SSD: A Unified Framework for Self-Supervised Outlier Detection (Coming soon!)
