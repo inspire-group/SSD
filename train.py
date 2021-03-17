@@ -28,7 +28,7 @@ def main():
     parser = argparse.ArgumentParser(description="SSD evaluation")
 
     parser.add_argument(
-        "--results_dir", type=str, default="./trained_models/",
+        "--results_dir", type=str, default="/data/data_vvikash/fall20/SSD/trained_models/",
     )
     parser.add_argument("--exp-name", type=str, default="temp")
     parser.add_argument(
@@ -39,8 +39,7 @@ def main():
     parser.add_argument("--num-classes", type=int, default=10)
 
     parser.add_argument("--dataset", type=str, default="cifar10")
-    parser.add_argument("--data-dir", type=str, default="./datasets/")
-    # parser.add_argument("--data-mode", type=str, choices=("org", "base", "ssl"), default="org")
+    parser.add_argument("--data-dir", type=str, default="/data/data_vvikash/datasets/")
     parser.add_argument("--normalize", action="store_true", default=False)
     parser.add_argument("--batch-size", type=int, default=512)
     parser.add_argument("--size", type=int, default=32)
@@ -51,18 +50,18 @@ def main():
     parser.add_argument("--warmup", action="store_true")
 
     parser.add_argument(
-        "--method", type=str, default="SupCon", choices=["SupCon", "SimCLR"]
+        "--method", type=str, default="SupCon", choices=["SupCon", "SimCLR", "SupCE"]
     )
     parser.add_argument("--temperature", type=float, default=0.5)
 
     parser.add_argument("--print-freq", type=int, default=100)
     parser.add_argument("--save-freq", type=int, default=50)
-    parser.add_argument("--gpu", type=str, default="0")
     parser.add_argument("--ckpt", type=str, help="checkpoint path")
     parser.add_argument("--seed", type=int, default=12345)
 
     args = parser.parse_args()
-
+    device = "cuda:0" 
+    
     if args.batch_size > 256 and not args.warmup:
         warnings.warn("Use warmup training for larger batch-sizes > 256")
     
@@ -103,10 +102,6 @@ def main():
     torch.cuda.manual_seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)
     np.random.seed(args.seed)
-
-    # Select GPUs
-    gpu_list = [int(i) for i in args.gpu.strip().split(",")]
-    device = torch.device(f"cuda:{gpu_list[0]}")
 
     # Create model
     if args.training_mode in ["SimCLR", "SupCon"]:
@@ -177,7 +172,6 @@ def main():
     )
     
     for epoch in range(0, args.epochs):
-        print(optimizer.param_groups[0]["lr"])
         trainer(
             model, device, train_loader, criterion, optimizer, lr_scheduler, epoch, args
         )

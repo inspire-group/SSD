@@ -114,7 +114,7 @@ def main():
     parser.add_argument("--clusters", type=int, default=1)
 
     parser.add_argument("--dataset", type=str, default="cifar10")
-    parser.add_argument("--data-dir", type=str, default="./datasets")
+    parser.add_argument("--data-dir", type=str, default="/data/data_vvikash/fall20/SSD/datasets/")
     parser.add_argument(
         "--data-mode", type=str, choices=("org", "base", "ssl"), default="base"
     )
@@ -127,9 +127,10 @@ def main():
     parser.add_argument("--seed", type=int, default=12345)
 
     args = parser.parse_args()
+    device = "cuda:0"
     
     assert args.ckpt, "Must provide a checkpint for evaluation"
-    
+
     if not os.path.isdir(args.results_dir):
         os.mkdir(args.results_dir)
 
@@ -143,11 +144,6 @@ def main():
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)
-    
-    # Select GPUs
-    gpu_list = [int(i) for i in args.gpu.strip().split(",")]
-    device = torch.device(f"cuda:{gpu_list[0]}")
-    print(device)
     
     # create model
     if args.training_mode in ["SimCLR", "SupCon"]:
@@ -177,7 +173,7 @@ def main():
     
     features_train, labels_train = get_features(model.encoder, train_loader)  # using feature befor MLP-head
     features_test, _ = get_features(model.encoder, test_loader)
-    print("Features in-distribution shape: ", features_train.shape, features_test.shape)
+    print("In-distribution features shape: ", features_train.shape, features_test.shape)
 
     ds = ["cifar10", "cifar100", "svhn", "texture", "blobs"]
     ds.remove(args.dataset)
@@ -192,7 +188,7 @@ def main():
             size=args.size
         )
         features_ood, _ = get_features(model.encoder, ood_loader)
-        print("Features out-of-distribution shape: ", features_ood.shape)
+        print("Out-of-distribution features shape: ", features_ood.shape)
 
         fpr95, auroc, aupr = get_eval_results(
             np.copy(features_train),

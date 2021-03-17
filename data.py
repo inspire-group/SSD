@@ -257,7 +257,7 @@ def stl(data_dir, batch_size, mode="base", normalize=True, norm_layer=None, size
 
 def texture(data_dir, batch_size, mode="base", normalize=True, norm_layer=None, size=32):
     """
-        Minimal version since we use this data only for OOD evaluation.
+        Minimal version since we use this dataset only for OOD evaluation.
     """
     transform = transforms.Compose([transforms.Resize(size), transforms.CenterCrop(size), transforms.ToTensor(), norm_layer])
     dataset = datasets.ImageFolder(root=os.path.join(data_dir, "dtd/images"), transform=transform)
@@ -268,7 +268,7 @@ def texture(data_dir, batch_size, mode="base", normalize=True, norm_layer=None, 
 # ref: https://github.com/hendrycks/outlier-exposure
 def blobs(data_dir, batch_size, mode="base", normalize=True, norm_layer=None, size=32):
     """
-        Minimal version since we use this data only for OOD evaluation.
+        Minimal version since we use this dataset only for OOD evaluation.
     """
     data = np.float32(np.random.binomial(n=1, p=0.7, size=(10000, size, size, 3)))
     for i in range(10000):
@@ -284,7 +284,7 @@ def blobs(data_dir, batch_size, mode="base", normalize=True, norm_layer=None, si
 
 def gaussian(data_dir, batch_size, mode="base", normalize=True, norm_layer=None, size=32):
     """
-        Minimal version since we use this data only for OOD evaluation.
+        Minimal version since we use this dataset only for OOD evaluation.
     """
     dummy_targets = torch.ones(10000)
     ood_data = torch.from_numpy(np.float32(np.clip(np.random.normal(loc=0.5, size=(10000, 3, 32, 32), scale=0.25), 0, 1)))
@@ -296,7 +296,7 @@ def gaussian(data_dir, batch_size, mode="base", normalize=True, norm_layer=None,
 
 def uniform(data_dir, batch_size, mode="base", normalize=True, norm_layer=None, size=32):
     """
-        Minimal version since we use this data only for OOD evaluation.
+        Minimal version since we use this dataset only for OOD evaluation.
     """
     dummy_targets = torch.ones(10000)
     ood_data = torch.from_numpy(np.float32(np.clip(np.random.uniform(size=(10000, 3, 32, 32)), 0, 1)))

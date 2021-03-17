@@ -87,11 +87,11 @@ def accuracy(output, target, topk=(1,)):
 
         _, pred = output.topk(maxk, 1, True, True)
         pred = pred.t()
-        correct = pred.eq(target.view(1, -1).expand_as(pred))
+        correct = pred.eq(target.reshape(1, -1).expand_as(pred))
 
         res = []
         for k in topk:
-            correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
+            correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
 
@@ -157,7 +157,7 @@ def baseeval(model, device, val_loader, criterion, args, epoch=0):
 
         progress.display(i)  # print final results
 
-    return round(top1.avg, 4), round(top5.avg, 4)
+    return top1.avg, top5.avg
 
 
 def knn(model, device, val_loader, criterion, args, writer, epoch=0):
@@ -189,7 +189,7 @@ def knn(model, device, val_loader, criterion, args, writer, epoch=0):
         
         print(f"knn accuracy for test data = {acc}")
 
-    return round(acc, 4), 0
+    return acc, 0
 
 
 #### OOD detection ####
