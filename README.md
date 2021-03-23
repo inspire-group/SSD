@@ -2,7 +2,7 @@
 
 Pdf: https://openreview.net/forum?id=v5gjXpmR8J
 
-Code for our ICLR 2021 paper on outlier detection, titled SSD, without requiring class labels of in-distribution training data. We leverage recent advances in self-supervised representation learning followed by cluster-based outlier detection to achieve competitive performance. This repository support both self-supervised training of networks and outlier detection evaluation of pre-trained networks. It also includes code for the two proposed extensions in the paper, i.e., 1) Few-shot outlier detection and 2) Extending SSD by including class labels, when available.
+Code for our ICLR 2021 paper on outlier detection, titled SSD, without requiring class labels of in-distribution training data. We leverage recent advances in self-supervised representation learning followed by the cluster-based outlier detection to achieve competitive performance. This repository support both self-supervised training of networks and outlier detection evaluation of pre-trained networks. It also includes code for the two proposed extensions in the paper, i.e., 1) Few-shot outlier detection and 2) Extending SSD by including class labels, when available.
 
 
 
@@ -22,9 +22,13 @@ This is how we can evaluate the performance of a pre-trained ResNet50 classifier
 `CUDA_VISIBLE_DEVICES=$gpus_ids python -u eval_ssd.py --arch resnet50 --training-mode SimCLR --dataset cifar10 --ckpt checkpoint_path --normalize --exp-name name_of_this_experiment`
 
 `training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose the right network modules for the checkpoint.
+
 `arch`: Choose from available architectures in `models.py`
+
 `dataset`: Choose from (`"cifar10", "cifar100", "svhn", "stl"`) 
+
 `--normalize`: If set, it will normalize input images. Use only if inputs were normalized in training too. 
+
 `--exp-name`: Experiment name. We will log results into a text file of this name.
 
 
@@ -44,6 +48,7 @@ We also support training a classifier using self-supervised, supervised or a com
 `CUDA_VISIBLE_DEVICES=$gpus_ids python -u train.py --arch resnet50 --training-mode SimCLR --dataset cifar10 --results-dir directory_to_save_checkpoint --exp-name name_of_this_experiment --warmup --normalize`
 
 `training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose appropriate network modules, loss functions, and trainers.
+
 `wamrup`: We recommend using warmup when batch-size is large, which is often the case for self-supervised methods. 
 
 Choices for other arguments are similar to what we mentioned earlier in the evaluation section.
