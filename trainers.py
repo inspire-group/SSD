@@ -38,8 +38,10 @@ def supervised(
         # basic properties of training
         if i == 0:
             print(
-                "images :", images.shape,
-                "target :", target.shape,
+                "images :",
+                images.shape,
+                "target :",
+                target.shape,
                 f"Batch_size from args: {args.batch_size}",
                 "lr: {:.5f}".format(optimizer.param_groups[0]["lr"]),
             )
@@ -64,7 +66,7 @@ def supervised(
         optimizer.step()
         if lr_scheduler:
             lr_scheduler.step()
-        
+
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()

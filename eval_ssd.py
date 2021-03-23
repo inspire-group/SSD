@@ -80,7 +80,7 @@ def get_scores_multi_cluster(ftrain, ftest, food, ypred):
 
 def get_eval_results(ftrain, ftest, food, labelstrain, args):
     """
-        None.
+    None.
     """
     # standardize data
     ftrain /= np.linalg.norm(ftrain, axis=-1, keepdims=True) + 1e-10
@@ -114,21 +114,23 @@ def main():
     parser.add_argument("--clusters", type=int, default=1)
 
     parser.add_argument("--dataset", type=str, default="cifar10")
-    parser.add_argument("--data-dir", type=str, default="/data/data_vvikash/fall20/SSD/datasets/")
+    parser.add_argument(
+        "--data-dir", type=str, default="/data/data_vvikash/fall20/SSD/datasets/"
+    )
     parser.add_argument(
         "--data-mode", type=str, choices=("org", "base", "ssl"), default="base"
     )
     parser.add_argument("--normalize", action="store_true", default=False)
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--size", type=int, default=32)
-    
+
     parser.add_argument("--gpu", type=str, default="0")
     parser.add_argument("--ckpt", type=str, help="checkpoint path")
     parser.add_argument("--seed", type=int, default=12345)
 
     args = parser.parse_args()
     device = "cuda:0"
-    
+
     assert args.ckpt, "Must provide a checkpint for evaluation"
 
     if not os.path.isdir(args.results_dir):
@@ -144,7 +146,7 @@ def main():
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)
-    
+
     # create model
     if args.training_mode in ["SimCLR", "SupCon"]:
         model = SSLResNet(arch=args.arch).eval()
@@ -153,7 +155,7 @@ def main():
     else:
         raise ValueError("Provide model class")
     model.encoder = nn.DataParallel(model.encoder).to(device)
-    
+
     # load checkpoint
     ckpt_dict = torch.load(args.ckpt, map_location="cpu")
     if "model" in ckpt_dict.keys():
@@ -168,10 +170,12 @@ def main():
         args.batch_size,
         mode=args.data_mode,
         normalize=args.normalize,
-        size=args.size
+        size=args.size,
     )
-    
-    features_train, labels_train = get_features(model.encoder, train_loader)  # using feature befor MLP-head
+
+    features_train, labels_train = get_features(
+        model.encoder, train_loader
+    )  # using feature befor MLP-head
     features_test, _ = get_features(model.encoder, test_loader)
     print("In-distribution features shape: ", features_train.shape, features_test.shape)
 
@@ -185,7 +189,7 @@ def main():
             mode="base",
             normalize=args.normalize,
             norm_layer=norm_layer,
-            size=args.size
+            size=args.size,
         )
         features_ood, _ = get_features(model.encoder, ood_loader)
         print("Out-of-distribution features shape: ", features_ood.shape)

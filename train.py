@@ -28,16 +28,20 @@ def main():
     parser = argparse.ArgumentParser(description="SSD evaluation")
 
     parser.add_argument(
-        "--results_dir", type=str, default="/data/data_vvikash/fall20/SSD/trained_models/",
-    )
+        "--results_dir",
+        type=str,
+        default="/data/data_vvikash/fall20/SSD/trained_models/",
+    )  # change this
     parser.add_argument("--exp-name", type=str, default="temp")
     parser.add_argument(
         "--training-mode", type=str, choices=("SimCLR", "SupCon", "SupCE")
     )
 
+    # model
     parser.add_argument("--arch", type=str, default="resnet50")
     parser.add_argument("--num-classes", type=int, default=10)
 
+    # training
     parser.add_argument("--dataset", type=str, default="cifar10")
     parser.add_argument("--data-dir", type=str, default="/data/data_vvikash/datasets/")
     parser.add_argument("--normalize", action="store_true", default=False)
@@ -49,22 +53,24 @@ def main():
     parser.add_argument("--weight-decay", type=float, default=1e-4)
     parser.add_argument("--warmup", action="store_true")
 
+    # ssl
     parser.add_argument(
         "--method", type=str, default="SupCon", choices=["SupCon", "SimCLR", "SupCE"]
     )
     parser.add_argument("--temperature", type=float, default=0.5)
 
+    # misc
     parser.add_argument("--print-freq", type=int, default=100)
     parser.add_argument("--save-freq", type=int, default=50)
     parser.add_argument("--ckpt", type=str, help="checkpoint path")
     parser.add_argument("--seed", type=int, default=12345)
 
     args = parser.parse_args()
-    device = "cuda:0" 
-    
+    device = "cuda:0"
+
     if args.batch_size > 256 and not args.warmup:
         warnings.warn("Use warmup training for larger batch-sizes > 256")
-    
+
     if not os.path.isdir(args.results_dir):
         os.mkdir(args.results_dir)
 
@@ -113,7 +119,7 @@ def main():
 
     # load feature extractor on gpu
     model.encoder = torch.nn.DataParallel(model.encoder).to(device)
-    
+
     # Dataloader
     train_loader, test_loader, _ = data.__dict__[args.dataset](
         args.data_dir,
@@ -142,13 +148,16 @@ def main():
         else trainers.supervised
     )
     val = knn if args.training_mode in ["SimCLR", "SupCon"] else baseeval
-    
+
     # warmup
     if args.warmup:
         wamrup_epochs = 10
         print(f"Warmup training for {wamrup_epochs} epochs")
         warmup_lr_scheduler = torch.optim.lr_scheduler.CyclicLR(
-            optimizer, base_lr=0.01, max_lr=args.lr, step_size_up=wamrup_epochs*len(train_loader)
+            optimizer,
+            base_lr=0.01,
+            max_lr=args.lr,
+            step_size_up=wamrup_epochs * len(train_loader),
         )
         for epoch in range(wamrup_epochs):
             trainer(
@@ -170,7 +179,7 @@ def main():
     lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, args.epochs * len(train_loader), 1e-4
     )
-    
+
     for epoch in range(0, args.epochs):
         trainer(
             model, device, train_loader, criterion, optimizer, lr_scheduler, epoch, args
@@ -191,7 +200,9 @@ def main():
         }
 
         save_checkpoint(
-            d, is_best, os.path.join(result_sub_dir, "checkpoint"),
+            d,
+            is_best,
+            os.path.join(result_sub_dir, "checkpoint"),
         )
 
         if not (epoch + 1) % args.save_freq:
