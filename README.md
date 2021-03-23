@@ -40,8 +40,8 @@ We also support training a classifier using self-supervised, supervised or a com
 
 `CUDA_VISIBLE_DEVICES=$gpus_ids python -u train.py --arch resnet50 --training-mode SimCLR --dataset cifar10 --results-dir directory_to_save_checkpoint --exp-name name_of_this_experiment --warmup --normalize`
 
-* `training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose appropriate network modules, loss functions, and trainers.
-* `wamrup`: We recommend using warmup when batch-size is large, which is often the case for self-supervised methods. 
+* `--training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose appropriate network modules, loss functions, and trainers.
+* `--wamrup`: We recommend using warmup when batch-size is large, which is often the case for self-supervised methods. 
 
 Choices for other arguments are similar to what we mentioned earlier in the evaluation section.
 
