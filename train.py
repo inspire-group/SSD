@@ -28,7 +28,7 @@ def main():
     parser = argparse.ArgumentParser(description="SSD evaluation")
 
     parser.add_argument(
-        "--results_dir",
+        "--results-dir",
         type=str,
         default="/data/data_vvikash/fall20/SSD/trained_models/",
     )  # change this

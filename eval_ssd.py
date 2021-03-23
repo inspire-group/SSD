@@ -107,7 +107,7 @@ def main():
     parser.add_argument(
         "--training-mode", type=str, choices=("SimCLR", "SupCon", "SupCE")
     )
-    parser.add_argument("--results_dir", type=str, default="./eval_results")
+    parser.add_argument("--results-dir", type=str, default="./eval_results")
 
     parser.add_argument("--arch", type=str, default="resnet50")
     parser.add_argument("--classes", type=int, default=10)
