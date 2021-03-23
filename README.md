@@ -21,23 +21,16 @@ This is how we can evaluate the performance of a pre-trained ResNet50 classifier
 
 `CUDA_VISIBLE_DEVICES=$gpus_ids python -u eval_ssd.py --arch resnet50 --training-mode SimCLR --dataset cifar10 --ckpt checkpoint_path --normalize --exp-name name_of_this_experiment`
 
-`training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose the right network modules for the checkpoint.
-
-`arch`: Choose from available architectures in `models.py`
-
-`dataset`: Choose from (`"cifar10", "cifar100", "svhn", "stl"`) 
-
-`--normalize`: If set, it will normalize input images. Use only if inputs were normalized in training too. 
-
-`--exp-name`: Experiment name. We will log results into a text file of this name.
-
-
+* `training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose the right network modules for the checkpoint.
+* `arch`: Choose from available architectures in `models.py`
+* `dataset`: Choose from (`"cifar10", "cifar100", "svhn", "stl"`) 
+* `--normalize`: If set, it will normalize input images. Use only if inputs were normalized in training too. 
+* `--exp-name`: Experiment name. We will log results into a text file of this name.
 
 
 The steps to evaluate with $SSD_k$ are exactly the same, except that now you have to also provide values for `k` and `copies` . `k` refers to how many outliers are available from each class of targeted OOD datasets while `copies` refers to the number of transformed instances created per available outlier image.
 
 `CUDA_VISIBLE_DEVICES=$gpu_id python -u eval_ssdk.py --arch resnet50 --training-mode SimCLR --dataset cifar10 --ckpt checkpoint_path --normalize --k 5 --copies 10`
-
 
 
 
@@ -47,9 +40,8 @@ We also support training a classifier using self-supervised, supervised or a com
 
 `CUDA_VISIBLE_DEVICES=$gpus_ids python -u train.py --arch resnet50 --training-mode SimCLR --dataset cifar10 --results-dir directory_to_save_checkpoint --exp-name name_of_this_experiment --warmup --normalize`
 
-`training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose appropriate network modules, loss functions, and trainers.
-
-`wamrup`: We recommend using warmup when batch-size is large, which is often the case for self-supervised methods. 
+* `training-mode`: Choose from (`"SimCLR", "SupCon", "SupCE"`). This will choose appropriate network modules, loss functions, and trainers.
+* `wamrup`: We recommend using warmup when batch-size is large, which is often the case for self-supervised methods. 
 
 Choices for other arguments are similar to what we mentioned earlier in the evaluation section.
 
