@@ -1,0 +1,6 @@
+scikit_image
+numpy
+torch
+torchvision
+faiss_gpu
+scikit_learn
