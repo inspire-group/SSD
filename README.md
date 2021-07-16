@@ -53,14 +53,12 @@ These models aren't exactly identical to ones in the paper but they give fairly 
 `CUDA_VISIBLE_DEVICES=0 python -u eval_ssd.py --arch resnet50 --training-mode SimCLR --dataset cifar10 --normalize --ckpt ./cifar10/base1/SimCLR_cifar10_resnet50_lr_0.5_decay_0.0001_bsz_900_temp_0.5_trial_0_ps__cosine_warm/last.pth`
 
 It gives the following results, which is fairly similar to ones in the paper. Most likely mistake, which gives suboptimal results, is to miss --normalize (when the model is trained with it). 
-`In-data = cifar10, OOD = cifar100, Clusters = 1, FPR95 = 0.5078, AUROC = 0.9063240349999999, AUPR = 0.8919609510086947
-
+```
+In-data = cifar10, OOD = cifar100, Clusters = 1, FPR95 = 0.5078, AUROC = 0.9063240349999999, AUPR = 0.8919609510086947
 In-data = cifar10, OOD = svhn, Clusters = 1, FPR95 = 0.020666871542716656, AUROC = 0.9962383988936693, AUPR = 0.9985624119973668
-
 In-data = cifar10, OOD = texture, Clusters = 1, FPR95 = 0.14645390070921985, AUROC = 0.9761002304964539, AUPR = 0.9556574287665671
-
-In-data = cifar10, OOD = blobs, Clusters = 1, FPR95 = 0.0467, AUROC = 0.9879078399999999, AUPR = 0.9843056376364349`
-
+In-data = cifar10, OOD = blobs, Clusters = 1, FPR95 = 0.0467, AUROC = 0.9879078399999999, AUPR = 0.9843056376364349
+```
 ## Reference
 
 If you find this work helpful, consider citing it. 
